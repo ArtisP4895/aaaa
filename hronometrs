@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Hronometrs</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="container">
+      <h1>Hronometrs</h1>
+      <div id="timer">00:00:00:000</div>
+      <button id="start">SĀKT</button>
+      <button id="stop">APSTĀTIES</button>
+      <button id="reset">ATJAUNOT</button>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
+
+let timer;
+let isRunning = false;
+let elapsedTime = 0;
+
+document.getElementById('start').addEventListener('click', startTimer);
+document.getElementById('stop').addEventListener('click', stopTimer);
+document.getElementById('reset').addEventListener('click', resetTimer);
+
+function startTimer() {
+    if (isRunning) return;
+    isRunning = true;
+    const startTime = Date.now() - elapsedTime;
+    timer = setInterval(() => {
+        elapsedTime = Date.now() - startTime;
+        document.getElementById('timer').textContent = formatTime(elapsedTime);
+    }, 10);
+}
+
+function stopTimer() {
+    isRunning = false;
+    clearInterval(timer);
+}
+
+function resetTimer() {
+    isRunning = false;
+    clearInterval(timer);
+    elapsedTime = 0;
+    document.getElementById('timer').textContent = "00:00:00.000";
+}
+
+function formatTime(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+    const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+    const seconds = String(totalSeconds % 60).padStart(2, '0');
+    const milliseconds = String(ms % 1000).padStart(3, '0');
+    return `${hours}:${minutes}:${seconds}.${milliseconds}`;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #000000;
+}
+
+.container {
+  text-align: center;
+  background: #fe7606;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#timer {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+button {
+  font-size: 1rem;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#start {
+  background-color: #4CAF50;
+  color: white;
+}
+
+#stop {
+  background-color: #f44336;
+  color: white;
+}
+
+#reset {
+  background-color: #008CBA;
+  color: white;
+}
